@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -22,11 +23,62 @@ public class HttpClientUtil {
     public final static String PUT = "PUT";
     public final static String DELETE = "DELETE";
 
+    public static String sendHttpGet(Map<String, String> headers, String reqUrl, Map<String, String> params) throws IOException {
+        return sendRequest(GET, headers, reqUrl, params, null, null, null);
+    }
+
+    public static String sendHttpPost(Map<String, String> headers, String reqUrl, Map<String, String> params) throws IOException {
+        return sendRequest(POST, headers, reqUrl, null, params, null, null);
+    }
+
+    public static String sendHttpPut(Map<String, String> headers, String reqUrl, Map<String, String> params) throws IOException {
+        return sendRequest(PUT, headers, reqUrl, null, params, null, null);
+    }
+
+    public static String sendHttpDelete(Map<String, String> headers, String reqUrl, Map<String, String> params) throws IOException {
+        return sendRequest(DELETE, headers, reqUrl, null, params, null, null);
+    }
+
+    public static String sendHttpGet(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams) throws IOException {
+        return sendRequest(GET, headers, reqUrl, queryParams, bodyParams, null, null);
+    }
+
+    public static String sendHttpPost(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams) throws IOException {
+        return sendRequest(POST, headers, reqUrl, queryParams, bodyParams, null, null);
+    }
+
+    public static String sendHttpPut(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams, String encodeCharset, String decodeCharset) throws IOException {
+        return sendRequest(PUT, headers, reqUrl, queryParams, bodyParams, encodeCharset, decodeCharset);
+    }
+
+    public static String sendHttpDelete(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams) throws IOException {
+        return sendRequest(DELETE, headers, reqUrl, queryParams, bodyParams, null, null);
+    }
+
+    public static String sendHttpGet(Map<String, String> headers, String reqUrl, Map<String, String> params, String encodeCharset, String decodeCharset) throws IOException {
+        return sendRequest(GET, headers, reqUrl, params, null, encodeCharset, decodeCharset);
+    }
+
+    public static String sendHttpPost(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams, String encodeCharset, String decodeCharset) throws IOException {
+        return sendRequest(POST, headers, reqUrl, queryParams, bodyParams, encodeCharset, decodeCharset);
+    }
+
+    public static String sendHttpPut(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams) throws IOException {
+        return sendRequest(PUT, headers, reqUrl, queryParams, bodyParams, null, null);
+    }
+
+    public static String sendHttpDelete(Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams, String encodeCharset, String decodeCharset) throws IOException {
+        return sendRequest(DELETE, headers, reqUrl, queryParams, bodyParams, encodeCharset, decodeCharset);
+    }
+
     public static String sendRequest(String method, Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams, String encodeCharset, String decodeCharset) throws IOException {
 
         String responseContent = null;
         CloseableHttpResponse response = null;
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpClient httpClient = null;
+        if (reqUrl.startsWith("http://")) {
+            httpClient = HttpClients.createDefault();
+        }
 
         encodeCharset = StringUtils.isEmpty(encodeCharset) ? "UTF-8" : encodeCharset;
         decodeCharset = StringUtils.isEmpty(decodeCharset) ? "UTF-8" : decodeCharset;
