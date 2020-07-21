@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -74,15 +73,14 @@ public class HttpClientUtil {
     public static String sendRequest(String method, Map<String, String> headers, String reqUrl, Map<String, String> queryParams, Map<String, String> bodyParams, String encodeCharset, String decodeCharset) throws IOException {
 
         String responseContent = null;
-        CloseableHttpResponse response = null;
-        CloseableHttpClient httpClient = null;
-        if (reqUrl.startsWith("http://")) {
-            httpClient = HttpClients.createDefault();
-        }
 
-        encodeCharset = StringUtils.isEmpty(encodeCharset) ? "UTF-8" : encodeCharset;
-        decodeCharset = StringUtils.isEmpty(decodeCharset) ? "UTF-8" : decodeCharset;
-        try {
+        CloseableHttpResponse response = null;
+
+        try(CloseableHttpClient httpClient = getHttpClient(reqUrl)) {
+
+            encodeCharset = StringUtils.isEmpty(encodeCharset) ? "UTF-8" : encodeCharset;
+            decodeCharset = StringUtils.isEmpty(decodeCharset) ? "UTF-8" : decodeCharset;
+
             if (MapUtils.isNotEmpty(queryParams)){
                 reqUrl = splicingUrl(reqUrl, queryParams, encodeCharset);
             }
@@ -125,10 +123,17 @@ public class HttpClientUtil {
             if (response != null){
                 response.close();
             }
-            httpClient.close();
         }
 
         return responseContent;
+    }
+
+    private static CloseableHttpClient getHttpClient(String reqUrl) {
+        if (reqUrl.startsWith("http://")){
+            return  HttpClients.createDefault();
+        } else {
+            return null;
+        }
     }
 
     private static StringEntity getStringEntity(Map<String, String> bodyParams, String encodeCharset) {
