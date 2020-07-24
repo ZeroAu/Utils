@@ -1,4 +1,4 @@
-package com.au.client;
+package com.au.httpclient;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.MapUtils;
@@ -25,7 +25,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-public class BaseHttpUtil {
+public class BaseHttpUtils {
 
     public final static String GET = "GET";
     public final static String POST = "POST";

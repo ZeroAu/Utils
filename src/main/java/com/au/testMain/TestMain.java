@@ -1,12 +1,8 @@
 package com.au.testMain;
 
-import com.au.TimeUtils;
-import com.au.client.BaseHttpUtil;
+import com.au.httpclient.BaseHttpUtils;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -34,7 +30,7 @@ public class TestMain {
                     int num = i;
                     executorService.submit(() -> {
                         try {
-                            System.out.println(num + ": " + BaseHttpUtil.sendRequest(BaseHttpUtil.GET, headers, "https://127.0.0.1:8443/test/testGet?hh=get&yyy=1", queryParam, bodyParam, null, null));
+                            System.out.println(num + ": " + BaseHttpUtils.sendRequest(BaseHttpUtils.GET, headers, "https://127.0.0.1:8443/test/testGet?hh=get&yyy=1", queryParam, bodyParam, null, null));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

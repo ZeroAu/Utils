@@ -1,18 +1,18 @@
-package com.au.client;
+package com.au.httpclient;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 import java.net.URI;
 
-public class HttpDelete extends HttpEntityEnclosingRequestBase {
+public class HttpGet extends HttpEntityEnclosingRequestBase {
 
-    public final static String METHOD_NAME = "DELETE";
+    public final static String METHOD_NAME = "GET";
 
-    public HttpDelete() {
+    public HttpGet() {
         super();
     }
 
-    public HttpDelete(final URI uri) {
+    public HttpGet(final URI uri) {
         super();
         setURI(uri);
     }
@@ -20,7 +20,7 @@ public class HttpDelete extends HttpEntityEnclosingRequestBase {
     /**
      * @throws IllegalArgumentException if the uri is invalid.
      */
-    public HttpDelete(final String uri) {
+    public HttpGet(final String uri) {
         super();
         setURI(URI.create(uri));
     }
@@ -29,5 +29,4 @@ public class HttpDelete extends HttpEntityEnclosingRequestBase {
     public String getMethod() {
         return METHOD_NAME;
     }
-
 }
